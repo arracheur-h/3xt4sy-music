@@ -1,705 +1,818 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>3xt4sy Music</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-<style>
-/* ════════════════ RESET & VARS ════════════════ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#06060a;--surf:#0f0f16;--surf2:#181822;--border:#26262f;
-  --accent:#ff5733;--accent-lo:rgba(255,87,51,.13);--accent2:#ff8c5a;
-  --gold:#e8a832;--text:#ddd8d2;--dim:#5a5a62;--mid:#8a8a92;--r:12px;
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3xt4sy Music - DJ Mixer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* ── grain ── */
-body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.04;
-  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+        :root {
+            --primary: #ff006e;
+            --secondary: #00f5ff;
+            --accent: #ffbe0b;
+            --dark: #0a0e27;
+            --darker: #050714;
+            --glow: rgba(255, 0, 110, 0.5);
+        }
 
-/* ── glows ── */
-.g1{position:fixed;width:700px;height:700px;border-radius:50%;top:-280px;left:-200px;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(255,87,51,.07) 0%,transparent 70%);filter:blur(70px)}
-.g2{position:fixed;width:550px;height:550px;border-radius:50%;bottom:-220px;right:-120px;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(232,168,50,.05) 0%,transparent 70%);filter:blur(60px)}
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--darker);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
 
-/* ════════════════ LAYOUT ════════════════ */
-.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:0 22px 90px}
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(255, 0, 110, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(0, 245, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 190, 11, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+            z-index: -1;
+        }
 
-/* ════════════════ TOP BAR ════════════════ */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:12px;flex-wrap:wrap}
-.lang-pills{display:flex;gap:6px}
-.lang-btn{background:var(--surf2);border:1px solid var(--border);border-radius:30px;padding:6px 16px;font-size:13px;font-weight:600;color:var(--mid);cursor:pointer;transition:all .2s;letter-spacing:.5px;font-family:inherit}
-.lang-btn:hover{border-color:#555;color:#fff}
-.lang-btn.active{background:var(--accent-lo);border-color:var(--accent);color:var(--accent2)}
-.free-badge{font-size:11px;font-weight:700;letter-spacing:1.5px;color:#fff;background:linear-gradient(135deg,#22c55e,#16a34a);padding:5px 14px;border-radius:30px;text-transform:uppercase}
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
 
-/* ════════════════ HEADER ════════════════ */
-header{text-align:center;padding:44px 0 40px}
-.header-badge{font-size:11px;letter-spacing:3.5px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:12px;display:block}
-header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(54px,12vw,104px);letter-spacing:5px;line-height:.92;background:linear-gradient(135deg,#fff 20%,var(--accent2) 55%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-header p{color:var(--dim);font-size:15px;margin-top:14px;font-weight:300}
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--dark) 0%, rgba(10, 14, 39, 0.95) 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 4px 30px rgba(255, 0, 110, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
 
-/* ════════════════ SECTION LABEL ════════════════ */
-.sec-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.1), transparent);
+            animation: slide 3s infinite;
+        }
 
-/* ════════════════ LIBRARY GRID ════════════════ */
-.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;margin-bottom:32px}
+        @keyframes slide {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
 
-.card{background:var(--surf);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;transition:border-color .3s,box-shadow .3s,transform .2s}
-.card:hover{transform:translateY(-2px);border-color:#3a3a44}
-.card.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 4px 22px rgba(255,87,51,.18)}
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
 
-/* thumb */
-.thumb-box{width:100%;aspect-ratio:16/9;background:#111;position:relative;overflow:hidden;cursor:pointer}
-.thumb-box img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s,filter .35s;filter:brightness(.75)}
-.card:hover .thumb-box img{transform:scale(1.04);filter:brightness(.6)}
-.play-circle{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
-.play-circle .pc{width:52px;height:52px;border-radius:50%;background:rgba(255,87,51,.88);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(255,87,51,.45);transition:transform .22s;opacity:.85;pointer-events:auto;cursor:pointer;border:none}
-.card:hover .play-circle .pc{opacity:1;transform:scale(1.1)}
-.play-circle .pc svg{margin-left:3px}
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px var(--glow);
+            letter-spacing: 3px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
 
-/* actions */
-.card-actions{display:flex;background:var(--surf2);border-top:1px solid var(--border)}
-.card-actions button{flex:1;padding:11px 0;border:none;background:transparent;color:var(--mid);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.3px}
-.card-actions button:hover{background:rgba(255,255,255,.04);color:#fff}
-.card-actions button.sel-btn.active{color:var(--accent);background:var(--accent-lo)}
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px var(--primary)); }
+            to { filter: drop-shadow(0 0 20px var(--secondary)); }
+        }
 
-/* info */
-.card-info{padding:13px 16px 15px}
-.card-info .title{font-size:15px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-info .artist{font-size:13px;color:var(--dim);margin-top:2px}
-.card-tags{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
-.card-tags span{font-size:11px;color:var(--mid);background:var(--surf2);border:1px solid var(--border);padding:2px 9px;border-radius:18px}
+        .lang-switch {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--secondary);
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--secondary);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-/* ════════════════ SELECTED BAR ════════════════ */
-.sel-bar{background:var(--surf);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.sel-bar .cnt{font-size:13px;color:var(--mid);white-space:nowrap}
-.sel-bar .cnt strong{color:var(--accent);font-size:20px}
-.sel-pills{display:flex;flex-wrap:wrap;gap:7px;flex:1}
-.pill{background:var(--accent-lo);border:1px solid rgba(255,87,51,.28);border-radius:28px;padding:4px 13px;font-size:13px;color:var(--accent2);font-weight:500;animation:popIn .3s cubic-bezier(.34,1.56,.64,1)}
-@keyframes popIn{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
+        .lang-switch:hover {
+            background: var(--secondary);
+            color: var(--dark);
+            box-shadow: 0 0 20px var(--secondary);
+            transform: translateY(-2px);
+        }
 
-/* ════════════════ ERROR ════════════════ */
-.err{background:rgba(200,55,55,.1);border:1px solid rgba(200,55,55,.28);border-radius:10px;padding:13px 18px;color:#e77;font-size:14px;margin-bottom:20px;display:none}
-.err.show{display:block}
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-/* ════════════════ CTA ════════════════ */
-.cta-wrap{text-align:center;margin-bottom:48px}
-.cta{display:inline-flex;align-items:center;gap:11px;background:linear-gradient(135deg,var(--accent),#d63a14);border:none;border-radius:50px;padding:17px 42px;color:#fff;font-family:inherit;font-size:15px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 30px rgba(255,87,51,.35);transition:transform .2s,box-shadow .2s,opacity .3s}
-.cta:hover{transform:translateY(-2px);box-shadow:0 8px 38px rgba(255,87,51,.5)}
-.cta:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none}
-.cta .spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+        /* Deck Section */
+        .decks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
 
-/* ════════════════ RESULTS ════════════════ */
-.res-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px}
-.res-head h2{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px}
-.res-head h2 span{color:var(--accent)}
-.res-head .sub{font-size:11px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase}
-.res-list{display:flex;flex-direction:column;gap:11px}
+        .deck {
+            background: linear-gradient(135deg, rgba(255, 0, 110, 0.1) 0%, rgba(10, 14, 39, 0.8) 100%);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 50px rgba(255, 0, 110, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-/* result card */
-.rc{background:var(--surf);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;animation:fadeUp .42s cubic-bezier(.16,1,.3,1) both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .deck::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 0, 110, 0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
 
-.rc-head{display:flex;align-items:center;gap:14px;padding:17px 20px;cursor:pointer;transition:background .2s}
-.rc-head:hover{background:rgba(255,255,255,.025)}
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
 
-.rc-rank{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--border);min-width:30px;text-align:center}
-.rc.r1 .rc-rank{color:var(--gold)}
-.rc.r2 .rc-rank{color:#b8b8b8}
-.rc.r3 .rc-rank{color:#a07850}
+        .deck:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 60px rgba(255, 0, 110, 0.4);
+        }
 
-.rc-ico{width:42px;height:42px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff}
-.rc-txt{flex:1;min-width:0}
-.rc-txt .title{font-size:15px;font-weight:600;color:#fff}
-.rc-txt .artist{font-size:13px;color:var(--dim);margin-top:2px}
+        .deck-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
 
-.rc-score{flex-shrink:0;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;padding:5px 14px;border-radius:28px}
-.s-hi{background:linear-gradient(135deg,rgba(255,87,51,.14),rgba(255,140,90,.08));color:var(--accent2);border:1px solid rgba(255,87,51,.24)}
-.s-md{background:linear-gradient(135deg,rgba(232,168,50,.14),rgba(232,168,50,.07));color:var(--gold);border:1px solid rgba(232,168,50,.24)}
-.s-lo{background:rgba(90,180,140,.1);color:#6ec9a0;border:1px solid rgba(90,180,140,.24)}
+        .track-select {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--secondary);
+            color: #fff;
+            padding: 0.8rem;
+            border-radius: 10px;
+            width: 100%;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
 
-.rc-chev{color:var(--dim);font-size:16px;transition:transform .3s}
-.rc.open .rc-chev{transform:rotate(180deg)}
+        .track-select:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(255, 190, 11, 0.3);
+        }
 
-.rc-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1)}
-.rc.open .rc-body{max-height:400px}
-.rc-body-in{border-top:1px solid var(--border);padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.blk-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:6px}
-.blk-label .d{width:6px;height:6px;border-radius:50%;background:var(--accent)}
-.blk-label.gold{color:var(--gold)}
-.blk-label.gold .d{background:var(--gold)}
-.rc-body-in p{font-size:14px;line-height:1.6;color:var(--mid);font-weight:300}
-.rc-body-in .tip p{font-style:italic}
+        .track-select option {
+            background: var(--dark);
+            color: #fff;
+        }
 
-/* breakdown bar */
-.breakdown{display:flex;align-items:center;gap:10px;padding:12px 20px 6px}
-.breakdown .lbl{font-size:10px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;min-width:50px}
-.bbar-wrap{display:flex;gap:3px;flex:1;height:7px;border-radius:4px;overflow:hidden;background:var(--surf2)}
-.bbar{height:100%;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.bbar.key{background:var(--accent)}
-.bbar.bpm{background:var(--gold)}
-.bbar.mood{background:#5ba8e8}
-.bbar.genre{background:#6ec9a0}
-.bbar-val{font-size:12px;color:var(--mid);min-width:34px;text-align:right;font-weight:600}
+        /* Controls */
+        .control-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
 
-/* legend */
-.legend{display:flex;gap:14px;flex-wrap:wrap;padding:6px 20px 14px}
-.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)}
-.legend-dot{width:10px;height:10px;border-radius:3px}
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-/* tags */
-.rc-tags{display:flex;gap:7px;flex-wrap:wrap;padding:0 20px 16px}
-.rc-tags span{font-size:11px;color:var(--mid);background:var(--surf2);border:1px solid var(--border);padding:2px 10px;border-radius:18px}
-.rc-tags .vibe{color:var(--accent2);border-color:rgba(255,87,51,.28);background:var(--accent-lo)}
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
 
-/* ════════════════ SOUNDBARS FOOTER ════════════════ */
-.bars{display:flex;align-items:flex-end;justify-content:center;gap:4px;height:38px;margin-top:56px;opacity:.15}
-.bars .b{width:4px;border-radius:2px;background:linear-gradient(180deg,var(--accent),var(--accent2));animation:bp 1.3s ease-in-out infinite alternate}
-@keyframes bp{from{height:6px}to{height:34px}}
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--glow);
+            transition: all 0.2s ease;
+        }
 
-/* ════════════════ RESPONSIVE ════════════════ */
-@media(max-width:580px){
-  .lib-grid{grid-template-columns:1fr}
-  .rc-body-in{grid-template-columns:1fr}
-  .topbar{flex-direction:column;align-items:flex-start}
-}
-</style>
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px var(--glow);
+        }
+
+        .value-display {
+            display: inline-block;
+            min-width: 50px;
+            text-align: right;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* Transport Controls */
+        .transport {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, #00f5ff, #00b8d4);
+            color: var(--dark);
+        }
+
+        .btn-play:hover {
+            box-shadow: 0 5px 25px rgba(0, 245, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-stop {
+            background: linear-gradient(135deg, #ff006e, #d90059);
+            color: #fff;
+        }
+
+        .btn-stop:hover {
+            box-shadow: 0 5px 25px rgba(255, 0, 110, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Master Section */
+        .master-section {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1) 0%, rgba(10, 14, 39, 0.8) 100%);
+            border: 2px solid var(--secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 50px rgba(0, 245, 255, 0.2);
+        }
+
+        .master-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .master-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Visualizer */
+        .visualizer {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Info Section */
+        .info {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .info strong {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .decks {
+                grid-template-columns: 1fr;
+            }
+
+            .master-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Playing indicator */
+        .playing-indicator {
+            width: 10px;
+            height: 10px;
+            background: #00ff00;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 10px;
+            box-shadow: 0 0 10px #00ff00;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <div class="header-content">
+            <h1>3XT4SY MUSIC</h1>
+            <button class="lang-switch" onclick="toggleLanguage()">
+                <span id="langText">EN</span>
+            </button>
+        </div>
+    </header>
 
-<div class="g1"></div>
-<div class="g2"></div>
+    <div class="container">
+        <!-- Visualizer -->
+        <div class="visualizer">
+            <canvas id="visualizer"></canvas>
+        </div>
 
-<div class="wrap">
+        <!-- Decks -->
+        <div class="decks">
+            <!-- Deck A -->
+            <div class="deck">
+                <h2 class="deck-title" data-translate="deckA">Deck A</h2>
+                <select class="track-select" id="trackA" onchange="loadTrack('A')">
+                    <option value="" data-translate="selectTrack">Select Track</option>
+                    <option value="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/examples/audio/drum-samples/kick.mp3">Kick Drum</option>
+                    <option value="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/examples/audio/drum-samples/snare.mp3">Snare</option>
+                    <option value="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/examples/audio/drum-samples/hihat.mp3">Hi-Hat</option>
+                </select>
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="lang-pills">
-      <button class="lang-btn active" onclick="setLang('fr')" id="btn-fr">FR</button>
-      <button class="lang-btn"        onclick="setLang('en')" id="btn-en">EN</button>
+                <div class="control-group">
+                    <label class="control-label" data-translate="volume">Volume</label>
+                    <input type="range" id="volumeA" min="0" max="100" value="70" oninput="updateVolume('A')">
+                    <span class="value-display" id="volumeAVal">70%</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" data-translate="pitch">Pitch</label>
+                    <input type="range" id="pitchA" min="-12" max="12" value="0" oninput="updatePitch('A')">
+                    <span class="value-display" id="pitchAVal">0</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" data-translate="speed">Speed</label>
+                    <input type="range" id="speedA" min="0.5" max="2" step="0.1" value="1" oninput="updateSpeed('A')">
+                    <span class="value-display" id="speedAVal">1.0x</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" data-translate="lowpass">Low Pass</label>
+                    <input type="range" id="lowpassA" min="20" max="20000" value="20000" oninput="updateLowpass('A')">
+                    <span class="value-display" id="lowpassAVal">20000 Hz</span>
+                </div>
+
+                <div class="transport">
+                    <button class="btn btn-play" onclick="playTrack('A')">
+                        <span data-translate="play">▶ Play</span>
+                    </button>
+                    <button class="btn btn-stop" onclick="stopTrack('A')">
+                        <span data-translate="stop">■ Stop</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Deck B -->
+            <div class="deck">
+                <h2 class="deck-title" data-translate="deckB">Deck B</h2>
+                <select class="track-select" id="trackB" onchange="loadTrack('B')">
+                    <option value="" data-translate="selectTrack">Select Track</option>
+                    <option value="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/examples/audio/drum-samples/kick.mp3">Kick Drum</option>
+                    <option value="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/examples/audio/drum-samples/snare.mp3">Snare</option>
+                    <option value="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/examples/audio/drum-samples/hihat.mp3">Hi-Hat</option>
+                </select>
+
+                <div class="control-group">
+                    <label class="control-label" data-translate="volume">Volume</label>
+                    <input type="range" id="volumeB" min="0" max="100" value="70" oninput="updateVolume('B')">
+                    <span class="value-display" id="volumeBVal">70%</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" data-translate="pitch">Pitch</label>
+                    <input type="range" id="pitchB" min="-12" max="12" value="0" oninput="updatePitch('B')">
+                    <span class="value-display" id="pitchBVal">0</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" data-translate="speed">Speed</label>
+                    <input type="range" id="speedB" min="0.5" max="2" step="0.1" value="1" oninput="updateSpeed('B')">
+                    <span class="value-display" id="speedBVal">1.0x</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" data-translate="lowpass">Low Pass</label>
+                    <input type="range" id="lowpassB" min="20" max="20000" value="20000" oninput="updateLowpass('B')">
+                    <span class="value-display" id="lowpassBVal">20000 Hz</span>
+                </div>
+
+                <div class="transport">
+                    <button class="btn btn-play" onclick="playTrack('B')">
+                        <span data-translate="play">▶ Play</span>
+                    </button>
+                    <button class="btn btn-stop" onclick="stopTrack('B')">
+                        <span data-translate="stop">■ Stop</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Master Section -->
+        <div class="master-section">
+            <h2 class="master-title" data-translate="masterControls">Master Controls</h2>
+            <div class="master-controls">
+                <div class="control-group">
+                    <label class="control-label" data-translate="crossfader">Crossfader (A ↔ B)</label>
+                    <input type="range" id="crossfader" min="0" max="100" value="50" oninput="updateCrossfader()">
+                    <span class="value-display" id="crossfaderVal">50%</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" data-translate="masterVolume">Master Volume</label>
+                    <input type="range" id="masterVolume" min="0" max="100" value="80" oninput="updateMasterVolume()">
+                    <span class="value-display" id="masterVolumeVal">80%</span>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" data-translate="reverb">Reverb</label>
+                    <input type="range" id="reverb" min="0" max="100" value="0" oninput="updateReverb()">
+                    <span class="value-display" id="reverbVal">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info -->
+        <div class="info">
+            <p data-translate="info">
+                <strong>3XT4SY MUSIC</strong> - Professional DJ mixing interface. Mix two tracks, adjust pitch, speed, filters, and use the crossfader for seamless transitions. 100% free and open source.
+            </p>
+        </div>
     </div>
-    <div class="free-badge">✦ 100% Free</div>
-  </div>
 
-  <!-- HEADER -->
-  <header>
-    <span class="header-badge" id="hBadge">♫ Mix Studio</span>
-    <h1>3XT4SY<br>MUSIC</h1>
-    <p id="hSub">Sélectionne tes morceaux. Le moteur crée le mix parfait.</p>
-  </header>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                deckA: "Deck A",
+                deckB: "Deck B",
+                selectTrack: "Select Track",
+                volume: "Volume",
+                pitch: "Pitch",
+                speed: "Speed",
+                lowpass: "Low Pass",
+                play: "▶ Play",
+                stop: "■ Stop",
+                masterControls: "Master Controls",
+                crossfader: "Crossfader (A ↔ B)",
+                masterVolume: "Master Volume",
+                reverb: "Reverb",
+                info: "<strong>3XT4SY MUSIC</strong> - Professional DJ mixing interface. Mix two tracks, adjust pitch, speed, filters, and use the crossfader for seamless transitions. 100% free and open source."
+            },
+            fr: {
+                deckA: "Platine A",
+                deckB: "Platine B",
+                selectTrack: "Sélectionner Piste",
+                volume: "Volume",
+                pitch: "Tonalité",
+                speed: "Vitesse",
+                lowpass: "Filtre Passe-Bas",
+                play: "▶ Lecture",
+                stop: "■ Arrêt",
+                masterControls: "Contrôles Maîtres",
+                crossfader: "Crossfader (A ↔ B)",
+                masterVolume: "Volume Maître",
+                reverb: "Réverbération",
+                info: "<strong>3XT4SY MUSIC</strong> - Interface de mixage DJ professionnelle. Mixez deux pistes, ajustez la tonalité, la vitesse, les filtres et utilisez le crossfader pour des transitions fluides. 100% gratuit et open source."
+            },
+            es: {
+                deckA: "Plato A",
+                deckB: "Plato B",
+                selectTrack: "Seleccionar Pista",
+                volume: "Volumen",
+                pitch: "Tono",
+                speed: "Velocidad",
+                lowpass: "Filtro Paso Bajo",
+                play: "▶ Reproducir",
+                stop: "■ Detener",
+                masterControls: "Controles Maestros",
+                crossfader: "Crossfader (A ↔ B)",
+                masterVolume: "Volumen Maestro",
+                reverb: "Reverberación",
+                info: "<strong>3XT4SY MUSIC</strong> - Interfaz de mezcla DJ profesional. Mezcla dos pistas, ajusta tono, velocidad, filtros y usa el crossfader para transiciones fluidas. 100% gratis y código abierto."
+            }
+        };
 
-  <!-- LIBRARY -->
-  <div class="sec-label" id="secLib">Bibliothèque</div>
-  <div class="lib-grid" id="libGrid"></div>
+        let currentLang = 'fr';
 
-  <!-- SELECTED BAR -->
-  <div class="sel-bar" id="selBar" style="display:none">
-    <div class="cnt"><strong id="selCnt">0</strong> <span id="selWord">morceau(x) sélectionné(s)</span></div>
-    <div class="sel-pills" id="selPills"></div>
-  </div>
+        function toggleLanguage() {
+            const langs = ['fr', 'en', 'es'];
+            const currentIndex = langs.indexOf(currentLang);
+            currentLang = langs[(currentIndex + 1) % langs.length];
+            document.getElementById('langText').textContent = currentLang.toUpperCase();
+            updateTranslations();
+        }
 
-  <!-- ERROR -->
-  <div class="err" id="errBox"></div>
+        function updateTranslations() {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[currentLang][key]) {
+                    if (el.tagName === 'OPTION' || el.tagName === 'SPAN' || el.tagName === 'LABEL') {
+                        el.textContent = translations[currentLang][key];
+                    } else {
+                        el.innerHTML = translations[currentLang][key];
+                    }
+                }
+            });
+        }
 
-  <!-- CTA -->
-  <div class="cta-wrap">
-    <button class="cta" id="ctaBtn" disabled onclick="generateMix()">
-      <span>✦</span>
-      <span id="ctaText">Générer le Mix</span>
-    </button>
-  </div>
+        // Audio Engine
+        let players = {
+            A: null,
+            B: null
+        };
 
-  <!-- RESULTS -->
-  <div id="resSection" style="display:none">
-    <div class="res-head">
-      <h2><span id="resTitleAccent">Mix</span> <span id="resTitlePlain">Suggéré</span></h2>
-      <span class="sub" id="resSub">Ordre optimal · Transitions</span>
-    </div>
-    <div class="res-list" id="resList"></div>
-  </div>
+        let filters = {
+            A: {
+                lowpass: new Tone.Filter(20000, 'lowpass'),
+                volume: new Tone.Volume(-5)
+            },
+            B: {
+                lowpass: new Tone.Filter(20000, 'lowpass'),
+                volume: new Tone.Volume(-5)
+            }
+        };
 
-  <!-- soundbars -->
-  <div class="bars" id="bars"></div>
-</div>
+        const reverb = new Tone.Reverb(1.5).toDestination();
+        reverb.wet.value = 0;
 
-<!-- ════════════════════════════════════════════════════
-     SCRIPT
-     ════════════════════════════════════════════════════ -->
-<script>
-// ═══════════════════════════════════════════
-//  i18n
-// ═══════════════════════════════════════════
-const T = {
-  fr:{
-    badge:"♫ Mix Studio",
-    sub:"Sélectionne tes morceaux. Le moteur crée le mix parfait.",
-    secLib:"Bibliothèque",
-    selWord:"morceau(x) sélectionné(s)",
-    btnSel:"Sélectionner",
-    btnSelOn:"Sélectionné ✓",
-    cta:"Générer le Mix",
-    errNoSel:"Sélectionne au moins 2 morceaux.",
-    resTitleAccent:"Mix",
-    resTitlePlain:"Suggéré",
-    resSub:"Ordre optimal · Transitions",
-    lblTransition:"Transition",
-    lblTip:"Conseil DJ",
-    trOpen:"Morceau d'ouverture — lance le mix avec cette énergie.",
-    trCrossfade:"Crossfade douce sur 8 bars — BPM et tonalité proches.",
-    trFadeSwap:"Fade out sur les 4 derniers bars → enchaîne avec l'intro.",
-    trTempoRamp:"Tempo ramp sur le break — accélère pour raccorder le BPM.",
-    trBuildUp:"Build-up progressif — monte l'énergie avec des FX avant le drop.",
-    trHardCut:"Hard cut sur le drop — coupe net au moment le plus fort.",
-    trEchoOut:"Echo out avec reverb long tail — laisse s'évaporer avant d'enchaîner.",
-    trHalfTime:"Passage en half-time — divise le BPM pour une pause atmosphérique.",
-    tipOpen:"Parfait pour ouvrir — énergie modérée qui accroche sans fatiguer.",
-    tipMaintain:"Maintient l'énergie du mix — garde le public engagé.",
-    tipPeak:"Moment de pic — c'est ici que le mix atteint son sommet.",
-    tipCoolDown:"Parfait pour descendre l'énergie en douceur vers la fin.",
-    tipContrast:"Crée un bon contraste — moment de surprise bienvenu.",
-    tipGroove:"Tonalité compatible — le groove va naturellement.",
-    vibeSoftOpen:"Ouverture douce",
-    vibeRiseUp:"Montée d'énergie",
-    vibePeakMoment:"Moment de pic",
-    vibeSmoothFlow:"Flow fluide",
-    vibeDarkTurn:"Tournant sombre",
-    vibeCoolDown:"Descente cool",
-    vibeSurprise:"Surprise",
-    vibeGroove:"Groove check",
-  },
-  en:{
-    badge:"♫ Mix Studio",
-    sub:"Pick your tracks. The engine builds the perfect mix.",
-    secLib:"Library",
-    selWord:"track(s) selected",
-    btnSel:"Select",
-    btnSelOn:"Selected ✓",
-    cta:"Generate Mix",
-    errNoSel:"Select at least 2 tracks.",
-    resTitleAccent:"Mix",
-    resTitlePlain:"Suggested",
-    resSub:"Optimal order · Transitions",
-    lblTransition:"Transition",
-    lblTip:"DJ Tip",
-    trOpen:"Opening track — kick off the mix with this energy.",
-    trCrossfade:"Smooth crossfade over 8 bars — BPM and key are close.",
-    trFadeSwap:"Fade out on the last 4 bars → straight into the intro.",
-    trTempoRamp:"Tempo ramp on the break — speed up to match BPM.",
-    trBuildUp:"Progressive build-up — raise the energy with FX before the drop.",
-    trHardCut:"Hard cut on the drop — slice it clean at the peak for impact.",
-    trEchoOut:"Echo out with long reverb tail — let it fade into the next.",
-    trHalfTime:"Half-time switch — cut the BPM for an atmospheric pause.",
-    tipOpen:"Great opener — moderate energy that hooks without fatiguing.",
-    tipMaintain:"Keeps the mix energy going — audience stays locked in.",
-    tipPeak:"Peak moment — this is where the mix hits its high point.",
-    tipCoolDown:"Perfect to ease the energy down toward the end.",
-    tipContrast:"Creates nice contrast — a welcome surprise moment.",
-    tipGroove:"Key is compatible — the groove flows naturally.",
-    vibeSoftOpen:"Soft Open",
-    vibeRiseUp:"Rising Energy",
-    vibePeakMoment:"Peak Moment",
-    vibeSmoothFlow:"Smooth Flow",
-    vibeDarkTurn:"Dark Turn",
-    vibeCoolDown:"Cool Down",
-    vibeSurprise:"Surprise",
-    vibeGroove:"Groove Check",
-  }
-};
-let lang='fr';
-let lastResult=null;
+        const masterVolume = new Tone.Volume(-3).connect(reverb);
 
-function setLang(l){
-  lang=l;
-  document.getElementById('btn-fr').className='lang-btn'+(l==='fr'?' active':'');
-  document.getElementById('btn-en').className='lang-btn'+(l==='en'?' active':'');
-  applyLang(); renderLibrary(); updateUI();
-  if(lastResult) renderResults(lastResult);
-}
-function t(k){return T[lang][k]||k}
-function applyLang(){
-  document.getElementById('hBadge').textContent=t('badge');
-  document.getElementById('hSub').textContent=t('sub');
-  document.getElementById('secLib').textContent=t('secLib');
-  document.getElementById('selWord').textContent=t('selWord');
-  document.getElementById('ctaText').textContent=t('cta');
-  document.getElementById('resTitleAccent').textContent=t('resTitleAccent');
-  document.getElementById('resTitlePlain').textContent=t('resTitlePlain');
-  document.getElementById('resSub').textContent=t('resSub');
-}
+        filters.A.lowpass.connect(filters.A.volume);
+        filters.A.volume.connect(masterVolume);
+        filters.B.lowpass.connect(filters.B.volume);
+        filters.B.volume.connect(masterVolume);
 
-// ═══════════════════════════════════════════
-//  SONG DATA
-// ═══════════════════════════════════════════
-const SONGS=[
-  {id:"blinding",     ytId:"4vLMZtAyWTQ",title:"Blinding Lights",     artist:"The Weeknd",        genre:"Synthpop",   bpm:171,key:"C#m", mood:"Energetic",     energy:9,color:"linear-gradient(135deg,#c9185b,#7b1fa2)"},
-  {id:"levitating",   ytId:"TjFKah3K-pg",title:"Levitating",          artist:"Dua Lipa",          genre:"Disco-Pop",  bpm:103,key:"C",   mood:"Joyful",        energy:7,color:"linear-gradient(135deg,#1976d2,#00acc1)"},
-  {id:"shapeofyou",   ytId:"1el5s2m4M8Q",title:"Shape of You",        artist:"Ed Sheeran",        genre:"Pop",        bpm:96, key:"Ab",  mood:"Playful",       energy:6,color:"linear-gradient(135deg,#43a047,#00897b)"},
-  {id:"uptown",       ytId:"kVJHMRxl1w0",title:"Uptown Funk",         artist:"Bruno Mars",        genre:"Funk-Pop",   bpm:115,key:"Ebm", mood:"Fun",           energy:8,color:"linear-gradient(135deg,#f57c00,#e53935)"},
-  {id:"hotline",      ytId:"uxnMQiWb35M",title:"Hotline Bling",       artist:"Drake",             genre:"R&B",        bpm:80, key:"C#m", mood:"Mellow",        energy:4,color:"linear-gradient(135deg,#5e35b1,#3949ab)"},
-  {id:"happy",        ytId:"y82x7MkwahE",title:"Happy",               artist:"Pharrell Williams", genre:"Soul-Pop",   bpm:160,key:"F",   mood:"Joyful",        energy:8,color:"linear-gradient(135deg,#ffb300,#ff8f00)"},
-  {id:"despacito",    ytId:"7pdAmnPX0Zs",title:"Despacito",           artist:"Luis Fonsi",        genre:"Reggaeton",  bpm:128,key:"Am",  mood:"Romantic",      energy:7,color:"linear-gradient(135deg,#d81b60,#f06292)"},
-  {id:"loseyou",      ytId:"6JlK293czL8",title:"Lose Yourself",       artist:"Eminem",            genre:"Hip-Hop",    bpm:171,key:"Dm",  mood:"Intense",       energy:10,color:"linear-gradient(135deg,#37474f,#546e7a)"},
-  {id:"rolling",      ytId:"rYwsLeoWgdY",title:"Rolling in the Deep", artist:"Adele",             genre:"Blues-Rock", bpm:110,key:"Cm",  mood:"Powerful",      energy:8,color:"linear-gradient(135deg,#6d4c41,#4e342e)"},
-  {id:"someone",      ytId:"joJWNlyryDJ",title:"Someone Like You",    artist:"Adele",             genre:"Ballad",     bpm:108,key:"A",   mood:"Melancholy",    energy:3,color:"linear-gradient(135deg,#4527a0,#283593)"},
-  {id:"badguy",       ytId:"UyDtG_rxOoY",title:"Bad Guy",             artist:"Billie Eilish",     genre:"Alt-Pop",    bpm:138,key:"Ebm", mood:"Edgy",          energy:7,color:"linear-gradient(135deg,#212121,#546e7a)"},
-  {id:"bohemian",     ytId:"9k0c85ry_a8",title:"Bohemian Rhapsody",   artist:"Queen",             genre:"Rock",       bpm:72, key:"Bb",  mood:"Epic",          energy:9,color:"linear-gradient(135deg,#b71c1c,#d32f2f)"},
-  {id:"stayingalive", ytId:"I_cijC-r864",title:"Stayin' Alive",       artist:"Bee Gees",         genre:"Disco",      bpm:103,key:"Am",  mood:"Groovy",        energy:7,color:"linear-gradient(135deg,#00695c,#00897b)"},
-  {id:"billiejean",   ytId:"Fq3GSzPJ3pQ",title:"Billie Jean",         artist:"Michael Jackson",  genre:"Pop-Funk",   bpm:117,key:"C#m", mood:"Groovy",        energy:7,color:"linear-gradient(135deg,#1a237e,#283593)"},
-  {id:"takeonme",     ytId:"9ID_tY57s6g",title:"Take On Me",          artist:"a-ha",              genre:"Synth-Pop",  bpm:138,key:"A",   mood:"Upbeat",        energy:8,color:"linear-gradient(135deg,#00838f,#4dd0e1)"},
-  {id:"creep",        ytId:"XbAccE9QdZY",title:"Creep",               artist:"Radiohead",         genre:"Alt-Rock",   bpm:92, key:"G",   mood:"Introspective", energy:3,color:"linear-gradient(135deg,#37474f,#78909c)"},
-];
+        function loadTrack(deck) {
+            const url = document.getElementById(`track${deck}`).value;
+            if (!url) return;
 
-// ═══════════════════════════════════════════
-//  MIXING ENGINE — pure music theory
-// ═══════════════════════════════════════════
+            if (players[deck]) {
+                players[deck].dispose();
+            }
 
-// Circle of fifths
-const CIRCLE=["C","G","D","A","E","B","F#","C#","Ab","Eb","Bb","F"];
-const REL_MINOR={C:"Am",G:"Em",D:"Bm",A:"F#m",E:"C#m",B:"G#m","F#":"D#m","C#":"A#m",Ab:"Fm",Eb:"Cm",Bb:"Gm",F:"Dm"};
-const REL_MAJOR={};
-Object.keys(REL_MINOR).forEach(k=>REL_MAJOR[REL_MINOR[k]]=k);
+            players[deck] = new Tone.Player(url).connect(filters[deck].lowpass);
+            players[deck].loop = true;
+        }
 
-function normaliseKey(k){
-  if(!k) return {root:"C",minor:false};
-  const m=k.endsWith("m");
-  return {root:m?k.slice(0,-1):k, minor:m};
-}
-function circleIdx(root){const i=CIRCLE.indexOf(root); return i===-1?0:i;}
+        async function playTrack(deck) {
+            if (!players[deck]) {
+                alert(currentLang === 'fr' ? 'Veuillez sélectionner une piste' : currentLang === 'es' ? 'Por favor selecciona una pista' : 'Please select a track');
+                return;
+            }
 
-function keyCompat(a,b){
-  if(a===b) return 100;
-  const ka=normaliseKey(a), kb=normaliseKey(b);
-  // relative pair
-  if(!ka.minor && REL_MINOR[ka.root]===b) return 92;
-  if(!kb.minor && REL_MINOR[kb.root]===a) return 92;
-  // circle distance (use roots)
-  const dist=Math.min(Math.abs(circleIdx(ka.root)-circleIdx(kb.root)), 12-Math.abs(circleIdx(ka.root)-circleIdx(kb.root)));
-  if(dist<=1) return 88;
-  if(dist<=2) return 74;
-  if(dist<=3) return 62;
-  return 48;
-}
+            await Tone.start();
+            players[deck].start();
+            animateVisualizer();
+        }
 
-function bpmCompat(a,b){
-  const diff=Math.abs(a-b)/Math.max(a,b);
-  if(diff===0)    return 100;
-  if(diff<=0.04)  return 96;
-  if(diff<=0.08)  return 85;
-  if(diff<=0.15)  return 70;
-  if(diff<=0.25)  return 55;
-  return 35;
-}
+        function stopTrack(deck) {
+            if (players[deck]) {
+                players[deck].stop();
+            }
+        }
 
-// Mood groups
-const MOOD_GROUPS=[
-  ["Energetic","Upbeat","Fun","Groovy"],
-  ["Melancholy","Introspective","Mellow"],
-  ["Powerful","Intense","Edgy"],
-  ["Joyful","Romantic","Playful"],
-  ["Epic"]
-];
-function moodGrp(mood){for(let i=0;i<MOOD_GROUPS.length;i++) if(MOOD_GROUPS[i].includes(mood)) return i; return -1;}
-function moodCompat(a,b){
-  if(a===b) return 100;
-  const ga=moodGrp(a), gb=moodGrp(b);
-  if(ga!==-1 && ga===gb) return 88;
-  // good cross-group flows
-  const adj=[[0,3],[0,2],[3,1],[4,0],[4,2]];
-  for(const[x,y] of adj) if((ga===x&&gb===y)||(ga===y&&gb===x)) return 68;
-  return 42;
-}
+        function updateVolume(deck) {
+            const value = document.getElementById(`volume${deck}`).value;
+            document.getElementById(`volume${deck}Val`).textContent = value + '%';
+            const dbValue = (value / 100) * 12 - 12;
+            filters[deck].volume.volume.value = dbValue;
+        }
 
-// Genre groups
-const GENRE_GROUPS=[
-  ["Pop","Disco-Pop","Soul-Pop","Alt-Pop","Synth-Pop","Pop-Funk"],
-  ["Disco","Funk-Pop"],
-  ["R&B","Soul"],
-  ["Rock","Alt-Rock","Blues-Rock"],
-  ["Hip-Hop"],
-  ["Reggaeton"],
-  ["Ballad"],
-  ["Synthpop"]
-];
-function genreGrp(g){for(let i=0;i<GENRE_GROUPS.length;i++) if(GENRE_GROUPS[i].includes(g)) return i; return -1;}
-function genreCompat(a,b){
-  if(a===b) return 100;
-  const ga=genreGrp(a), gb=genreGrp(b);
-  if(ga!==-1 && ga===gb) return 88;
-  if(ga===0||gb===0) return 72; // Pop is neutral
-  if((ga===0&&gb===1)||(ga===1&&gb===0)) return 80;
-  if((ga===2&&gb===0)||(ga===0&&gb===2)) return 75;
-  return 52;
-}
+        function updatePitch(deck) {
+            const value = document.getElementById(`pitch${deck}`).value;
+            document.getElementById(`pitch${deck}Val`).textContent = value;
+            if (players[deck]) {
+                players[deck].playbackRate = Math.pow(2, value / 12);
+            }
+        }
 
-// Combined pair score
-function pairScore(a,b){
-  const key  =keyCompat(a.key,b.key);
-  const bpm  =bpmCompat(a.bpm,b.bpm);
-  const mood =moodCompat(a.mood,b.mood);
-  const genre=genreCompat(a.genre,b.genre);
-  const total=Math.round(key*0.30+bpm*0.35+mood*0.20+genre*0.15);
-  return {total,key,bpm,mood,genre};
-}
+        function updateSpeed(deck) {
+            const value = document.getElementById(`speed${deck}`).value;
+            document.getElementById(`speed${deck}Val`).textContent = value + 'x';
+            if (players[deck]) {
+                const currentPitch = document.getElementById(`pitch${deck}`).value;
+                players[deck].playbackRate = parseFloat(value) * Math.pow(2, currentPitch / 12);
+            }
+        }
 
-// Transition text
-function pickTransition(prev,curr,scores){
-  if(!prev) return t('trOpen');
-  const bpmDiff=Math.abs(prev.bpm-curr.bpm)/Math.max(prev.bpm,curr.bpm);
-  const ratio=Math.max(prev.bpm,curr.bpm)/Math.min(prev.bpm,curr.bpm);
-  if(curr.energy-prev.energy>=3)  return t('trBuildUp');
-  if(prev.energy-curr.energy>=3)  return t('trEchoOut');
-  if(ratio>=1.8 && ratio<=2.2)    return t('trHalfTime');
-  if(bpmDiff<=0.08)               return t('trCrossfade');
-  if(bpmDiff<=0.18)               return t('trTempoRamp');
-  if(scores.mood<60)              return t('trHardCut');
-  return t('trFadeSwap');
-}
+        function updateLowpass(deck) {
+            const value = document.getElementById(`lowpass${deck}`).value;
+            document.getElementById(`lowpass${deck}Val`).textContent = value + ' Hz';
+            filters[deck].lowpass.frequency.value = parseFloat(value);
+        }
 
-// DJ tip
-function pickTip(track,pos,total){
-  if(pos===0)                        return t('tipOpen');
-  if(pos===total-1)                  return t('tipCoolDown');
-  if(pos===Math.floor(total*0.55))   return t('tipPeak');
-  if(track.energy>=8)                return t('tipMaintain');
-  return t('tipGroove');
-}
+        function updateCrossfader() {
+            const value = document.getElementById('crossfader').value;
+            document.getElementById('crossfaderVal').textContent = value + '%';
+            
+            const normalizedValue = value / 100;
+            const volA = Math.cos(normalizedValue * Math.PI / 2);
+            const volB = Math.sin(normalizedValue * Math.PI / 2);
+            
+            const dbA = 20 * Math.log10(volA || 0.0001) - 5;
+            const dbB = 20 * Math.log10(volB || 0.0001) - 5;
+            
+            filters.A.volume.volume.rampTo(dbA, 0.1);
+            filters.B.volume.volume.rampTo(dbB, 0.1);
+        }
 
-// Vibe label
-function pickVibe(track,pos,total,prev){
-  if(pos===0)            return t('vibeSoftOpen');
-  if(pos===total-1)      return t('vibeCoolDown');
-  if(track.energy>=9)    return t('vibePeakMoment');
-  if(prev && Math.abs(track.energy-prev.energy)>=3)
-    return track.energy>prev.energy ? t('vibeRiseUp') : t('vibeDarkTurn');
-  if(track.energy>=7)    return t('vibeGroove');
-  return t('vibeSmoothFlow');
-}
+        function updateMasterVolume() {
+            const value = document.getElementById('masterVolume').value;
+            document.getElementById('masterVolumeVal').textContent = value + '%';
+            const dbValue = (value / 100) * 12 - 12;
+            masterVolume.volume.value = dbValue;
+        }
 
-// ═══════════════════════════════════════════
-//  ORDERING — greedy energy arc
-// ═══════════════════════════════════════════
-function orderTracks(tracks){
-  if(tracks.length<=1) return tracks;
+        function updateReverb() {
+            const value = document.getElementById('reverbVal').value;
+            document.getElementById('reverbVal').textContent = value + '%';
+            reverb.wet.value = value / 100;
+        }
 
-  // Starter = closest to energy 5-6 (mid)
-  let sorted=[...tracks].sort((a,b)=>Math.abs(a.energy-5.5)-Math.abs(b.energy-5.5));
-  let result=[sorted[0]];
-  let remaining=sorted.slice(1);
+        // Visualizer
+        const canvas = document.getElementById('visualizer');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
 
-  while(remaining.length){
-    const current=result[result.length-1];
-    const posRatio=result.length/tracks.length;
+        let animationId;
 
-    // Energy arc target
-    let targetE;
-    if(posRatio<0.25)      targetE=6;
-    else if(posRatio<0.55) targetE=9;
-    else if(posRatio<0.75) targetE=7;
-    else                   targetE=4;
+        function animateVisualizer() {
+            const bars = 64;
+            const barWidth = canvas.width / bars;
 
-    let best=null, bestScore=-1;
-    for(const cand of remaining){
-      const pair =pairScore(current,cand).total;
-      const eFit =100-Math.abs(cand.energy-targetE)*12;
-      const score=pair*0.70+Math.max(eFit,20)*0.30;
-      if(score>bestScore){bestScore=score;best=cand;}
-    }
-    result.push(best);
-    remaining=remaining.filter(x=>x!==best);
-  }
-  return result;
-}
+            function draw() {
+                ctx.fillStyle = 'rgba(10, 14, 39, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-// ═══════════════════════════════════════════
-//  GENERATE MIX
-// ═══════════════════════════════════════════
-function generateMix(){
-  if(selected.size<2){showErr(t('errNoSel'));return;}
-  hideErr();
-  const btn=document.getElementById('ctaBtn');
-  btn.disabled=true;
-  btn.innerHTML=`<span class="spin"></span><span>${t('cta')}</span>`;
+                for (let i = 0; i < bars; i++) {
+                    const barHeight = Math.random() * canvas.height * 0.8;
+                    const x = i * barWidth;
+                    const hue = (i / bars) * 360;
+                    
+                    const gradient = ctx.createLinearGradient(x, canvas.height, x, canvas.height - barHeight);
+                    gradient.addColorStop(0, `hsl(${hue}, 100%, 50%)`);
+                    gradient.addColorStop(1, `hsl(${hue + 60}, 100%, 70%)`);
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+                }
 
-  // short delay for the spinner feel
-  setTimeout(()=>{
-    const tracks=[...selected].map(id=>SONGS.find(s=>s.id===id));
-    const ordered=orderTracks(tracks);
+                animationId = requestAnimationFrame(draw);
+            }
 
-    const results=ordered.map((track,i)=>{
-      const prev=i===0?null:ordered[i-1];
-      const scores=prev?pairScore(prev,track):{total:100,key:100,bpm:100,mood:100,genre:100};
-      return {
-        track,
-        fluidity: i===0?100:scores.total,
-        scores,
-        transition: pickTransition(prev,track,scores),
-        tip:        pickTip(track,i,ordered.length),
-        vibe:       pickVibe(track,i,ordered.length,prev),
-      };
-    });
+            draw();
+        }
 
-    lastResult=results;
-    renderResults(results);
-    btn.disabled=selected.size<2;
-    btn.innerHTML=`<span>✦</span><span>${t('cta')}</span>`;
-  },680);
-}
+        // Initialize
+        updateTranslations();
 
-// ═══════════════════════════════════════════
-//  UI — LIBRARY
-// ═══════════════════════════════════════════
-let selected=new Set();
-
-function renderLibrary(){
-  document.getElementById('libGrid').innerHTML=SONGS.map(s=>{
-    const isSel=selected.has(s.id);
-    return `
-    <div class="card ${isSel?'sel':''}" id="card-${s.id}">
-      <div class="thumb-box" onclick="openYT('${s.ytId}')">
-        <img src="https://img.youtube.com/vi/${s.ytId}/mqdefault.jpg" alt="${s.title}" loading="lazy"/>
-        <div class="play-circle">
-          <button class="pc" onclick="event.stopPropagation();openYT('${s.ytId}')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
-          </button>
-        </div>
-      </div>
-      <div class="card-actions">
-        <button onclick="toggleSong('${s.id}')" class="sel-btn ${isSel?'active':''}">${isSel?t('btnSelOn'):t('btnSel')}</button>
-      </div>
-      <div class="card-info">
-        <div class="title">${s.title}</div>
-        <div class="artist">${s.artist}</div>
-        <div class="card-tags">
-          <span>♪ ${s.bpm} BPM</span>
-          <span>🎵 ${s.key}</span>
-          <span>${s.genre}</span>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function toggleSong(id){
-  selected.has(id)?selected.delete(id):selected.add(id);
-  const card=document.getElementById('card-'+id);
-  const isSel=selected.has(id);
-  card.classList.toggle('sel',isSel);
-  card.querySelector('.sel-btn').className='sel-btn'+(isSel?' active':'');
-  card.querySelector('.sel-btn').textContent=isSel?t('btnSelOn'):t('btnSel');
-  updateUI();
-}
-
-function updateUI(){
-  const bar=document.getElementById('selBar');
-  const pills=document.getElementById('selPills');
-  document.getElementById('selCnt').textContent=selected.size;
-  document.getElementById('selWord').textContent=t('selWord');
-  if(!selected.size){bar.style.display='none';pills.innerHTML='';}
-  else{
-    bar.style.display='flex';
-    pills.innerHTML=[...selected].map(id=>`<span class="pill">${SONGS.find(s=>s.id===id).title}</span>`).join('');
-  }
-  document.getElementById('ctaBtn').disabled=selected.size<2;
-  document.getElementById('resSection').style.display='none';
-  hideErr();
-}
-
-function openYT(ytId){window.open('https://www.youtube.com/watch?v='+ytId,'_blank','noopener')}
-function showErr(msg){const e=document.getElementById('errBox');e.textContent='⚠ '+msg;e.classList.add('show')}
-function hideErr(){document.getElementById('errBox').classList.remove('show')}
-
-// ═══════════════════════════════════════════
-//  UI — RESULTS
-// ═══════════════════════════════════════════
-function renderResults(results){
-  const sec=document.getElementById('resSection');
-  const list=document.getElementById('resList');
-  sec.style.display='block';
-
-  // total width of all 4 bars should fill 100% — each weighted
-  // key=30% bpm=35% mood=20% genre=15%  — we map score 0-100 into that slice
-  list.innerHTML=results.map((r,i)=>{
-    const score=r.fluidity;
-    const sc=score>=80?'s-hi':score>=60?'s-md':'s-lo';
-    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'';
-
-    // bar widths as % of full bar (each slice is weight*score/100 mapped to its max width)
-    const wKey  =(r.scores.key/100)*30;
-    const wBpm  =(r.scores.bpm/100)*35;
-    const wMood =(r.scores.mood/100)*20;
-    const wGenre=(r.scores.genre/100)*15;
-
-    return `
-    <div class="rc ${rc}" style="animation-delay:${i*.07}s" id="rc-${i}">
-      <div class="rc-head" onclick="toggleRC(${i})">
-        <div class="rc-rank">${i+1}</div>
-        <div class="rc-ico" style="background:${r.track.color}">♫</div>
-        <div class="rc-txt">
-          <div class="title">${r.track.title}</div>
-          <div class="artist">${r.track.artist} · <span style="color:var(--dim)">${r.track.genre}</span></div>
-        </div>
-        <div class="rc-score ${sc}">${score}%</div>
-        <div class="rc-chev">▾</div>
-      </div>
-      <div class="rc-body">
-        <div class="rc-body-in">
-          <div>
-            <div class="blk-label"><span class="d"></span>${t('lblTransition')}</div>
-            <p>${r.transition}</p>
-          </div>
-          <div class="tip">
-            <div class="blk-label gold"><span class="d"></span>${t('lblTip')}</div>
-            <p>${r.tip}</p>
-          </div>
-        </div>
-        <div class="breakdown">
-          <span class="lbl">Score</span>
-          <div class="bbar-wrap">
-            <div class="bbar key"   style="width:${wKey}%"></div>
-            <div class="bbar bpm"   style="width:${wBpm}%"></div>
-            <div class="bbar mood"  style="width:${wMood}%"></div>
-            <div class="bbar genre" style="width:${wGenre}%"></div>
-          </div>
-          <span class="bbar-val">${score}%</span>
-        </div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Key</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>BPM</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#5ba8e8"></div>Mood</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#6ec9a0"></div>Genre</div>
-        </div>
-        <div class="rc-tags">
-          <span>♪ ${r.track.bpm} BPM</span>
-          <span>🎵 ${r.track.key}</span>
-          <span>⚡ E${r.track.energy}/10</span>
-          <span class="vibe">${r.vibe}</span>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
-  sec.scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function toggleRC(i){
-  const card=document.getElementById('rc-'+i);
-  document.querySelectorAll('.rc').forEach((c,j)=>{if(j!==i)c.classList.remove('open')});
-  card.classList.toggle('open');
-}
-
-// ═══════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════
-document.getElementById('bars').innerHTML=Array.from({length:38},(_,i)=>
-  `<div class="b" style="animation-delay:${(i*.08)%1.3}s;height:${7+Math.sin(i*.55)*11}px"></div>`
-).join('');
-applyLang();
-renderLibrary();
-</script>
+        window.addEventListener('resize', () => {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        });
+    </script>
 </body>
 </html>

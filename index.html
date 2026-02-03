@@ -106,11 +106,35 @@ header p { color:var(--dim); font-size:15px; margin-top:14px; font-weight:300; }
 .card:hover { transform:translateY(-2px); border-color:#3a3a44; }
 .card.sel { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent),0 4px 22px rgba(255,87,51,.18); }
 
-/* yt container — pointer-events ON so player works */
-.yt-box { width:100%; aspect-ratio:16/9; background:#000; position:relative; overflow:hidden; }
-.yt-box iframe { width:100%; height:100%; border:none; display:block; }
+/* ── thumbnail zone ── */
+.thumb-box {
+  width:100%; aspect-ratio:16/9; background:#111;
+  position:relative; overflow:hidden; cursor:pointer;
+}
+.thumb-box img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .35s, filter .35s;
+  filter: brightness(.75);
+}
+.card:hover .thumb-box img { transform:scale(1.04); filter:brightness(.6); }
 
-/* action strip under video */
+/* play circle */
+.play-circle {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:2;
+  pointer-events:none;
+}
+.play-circle .pc {
+  width:52px; height:52px; border-radius:50%;
+  background:rgba(255,87,51,.88);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 18px rgba(255,87,51,.45);
+  transition:transform .22s, background .22s;
+  opacity:.85; pointer-events:auto; cursor:pointer; border:none;
+}
+.card:hover .play-circle .pc { opacity:1; transform:scale(1.08); }
+.play-circle .pc svg { margin-left:3px; }
+
+/* ── action strip ── */
 .card-actions {
   display:flex; align-items:center; gap:0;
   background:var(--surf2); border-top:1px solid var(--border);
@@ -396,10 +420,13 @@ function renderLibrary(){
     const isSel = selected.has(s.id);
     return `
     <div class="card ${isSel?'sel':''}" id="card-${s.id}">
-      <div class="yt-box">
-        <iframe src="https://www.youtube.com/embed/${s.ytId}?rel=0&modestbranding=1"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen loading="lazy"></iframe>
+      <div class="thumb-box" onclick="openYT('${s.ytId}')">
+        <img src="https://img.youtube.com/vi/${s.ytId}/mqdefault.jpg" alt="${s.title}" loading="lazy" />
+        <div class="play-circle">
+          <button class="pc" onclick="event.stopPropagation(); openYT('${s.ytId}')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
+          </button>
+        </div>
       </div>
       <div class="card-actions">
         <button onclick="toggleSong('${s.id}')" class="sel-btn ${isSel?'active':''}">${isSel? t('btnSelOn') : t('btnSel')}</button>
@@ -452,6 +479,9 @@ function updateUI(){
 // ── errors ─────────────────────────────────
 function showErr(msg){ const e=document.getElementById('errBox'); e.textContent='⚠ '+msg; e.classList.add('show'); }
 function hideErr(){ document.getElementById('errBox').classList.remove('show'); }
+
+// ── open YouTube in new tab ────────────────
+function openYT(ytId){ window.open('https://www.youtube.com/watch?v='+ytId, '_blank', 'noopener'); }
 
 // ── build prompt ───────────────────────────
 function buildPrompt(){
